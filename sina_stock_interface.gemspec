@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = SinaStockInterface::VERSION
   spec.authors       = ["hging"]
   spec.email         = ["hging3@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{get stock info and data by this gem.}
+  spec.description   = %q{get stock info and data by this gem.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
