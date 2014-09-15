@@ -120,16 +120,39 @@ require "open-uri"
     "lyBg"
   ]
 ]
+数据结构(搜索):
+[
+  [
+    "300123",
+    "11", 数据类型(11为股票,具体未知)
+    "300123", 
+    "sz300123", 股票ID
+    "太阳鸟", 股票名称
+    "tyn"
+  ], [
+    "000123", 
+    "11", 
+    "000123", 
+    "sh000123", 
+    "180动态", 
+    "180dt"
+  ], [
+    "600123", 
+    "11", 
+    "600123", 
+    "sh600123", 
+    "兰花科创", 
+    "lhkc"
+  ]
+]
 =end
 
 module SinaStockInterface
   class Data
     StockDataUrl = 'http://hq.sinajs.cn/list='
-
     def self.format_data(request)
       request.scan(/var hq_str_(\w*)="(\S*)";/).collect{|x| x.join(",").split(",")}
     end
-
     def self.get_stock_data_by_id(stock_id)
       url = "#{StockDataUrl}#{stock_id}"
       request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
@@ -140,21 +163,31 @@ module SinaStockInterface
       url = "#{StockDataUrl}#{stock_index_id}"
       request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
       format_data(request)          
-    end
+    end    
   end
+
   class Info
     SSEUrl = 'http://www.sse.com.cn/js/common/ssesuggestdata.js'
     SZSEUrl = 'http://www.szse.cn/szseWeb/FrontController.szse?ACTIONID=8&CATALOGID=1110&TABKEY=tab1&ENCODE=1'
     def self.get_sse_info
-      format = /val:"(\w*)",val2:"(\S*)",val3:"(\w*)"/
+      format = /val:"(\w*)",val2:"(\D*\S*)",val3:"(\D*\w*)"/
       request = open(SSEUrl).read.force_encoding('UTF-8')
       request.scan(format)
     end
-
     def self.get_szse_info
       format = /style='mso-number-\w*\D*(\w*)\D*center'.>(\D+)<\D*<td  class='cls-data-td'  align='left/
       request = open(SZSEUrl).read.force_encoding('UTF-8')
       request.scan(format)
+    end
+  end
+
+  class Search
+    SearchUrl = 'http://suggest3.sinajs.cn/suggest/type=11,12,13,14,15&key='
+    def self.search(key)
+      format = /"(\S*)"/
+      url = URI.encode("#{SearchUrl}#{key}")
+      request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
+      request.scan(format)[0][0].split(';').collect{|a| a.split(',')}
     end
   end
 end
