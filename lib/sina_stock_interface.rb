@@ -151,7 +151,7 @@ module SinaStockInterface
   class Data
     StockDataUrl = 'http://hq.sinajs.cn/list='
     def self.format_data(request)
-      request.scan(/var hq_str_(\w*)="(\S*)";/).collect{|x| x.join(",").split(",")}
+      request.scan(/var hq_str_(\w*)="(\D*\S*)";/).collect{|x| x.join(",").split(",")}
     end
     def self.get_stock_data_by_id(stock_id)
       url = "#{StockDataUrl}#{stock_id}"
