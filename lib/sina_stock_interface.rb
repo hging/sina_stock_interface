@@ -170,7 +170,7 @@ module SinaStockInterface
     SSEUrl = 'http://www.sse.com.cn/js/common/ssesuggestdata.js'
     SZSEUrl = 'http://www.szse.cn/szseWeb/FrontController.szse?ACTIONID=8&CATALOGID=1110&TABKEY=tab1&ENCODE=1'
     def self.get_sse_info
-      format = /val:"(\w*)",val2:"(\D*\S*)",val3:"(\D*\w*)"/
+      format = /val:"(\w*)",val2:"(\D*\S*)",val3:"(\D*\w*)"}/
       request = open(SSEUrl).read.force_encoding('UTF-8')
       request.scan(format)
     end
