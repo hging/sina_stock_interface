@@ -151,7 +151,7 @@ module SinaStockInterface
   class Data
     StockDataUrl = 'http://hq.sinajs.cn/list='
     def self.format_data(request)
-      request.scan(/var hq_str_(\w*)="(\D*\S*)";/).collect{|x| x.join(",").split(",")}
+      request.scan(/var hq_str_(\w*)="(.*)";/).collect{|x| x.join(",").split(",")}
     end
     def self.get_stock_data_by_id(stock_id)
       url = "#{StockDataUrl}#{stock_id}"
@@ -170,7 +170,7 @@ module SinaStockInterface
     SSEUrl = 'http://www.sse.com.cn/js/common/ssesuggestdata.js'
     SZSEUrl = 'http://www.szse.cn/szseWeb/FrontController.szse?ACTIONID=8&CATALOGID=1110&TABKEY=tab1&ENCODE=1'
     def self.get_sse_info
-      format = /val:"(\w*)",val2:"(\D*\S*)",val3:"(\D*\w*)"}/
+      format = /val:"(\w*)",val2:"(.*)",val3:"(\D*\w*)"}/
       request = open(SSEUrl).read.force_encoding('UTF-8')
       request.scan(format)
     end
