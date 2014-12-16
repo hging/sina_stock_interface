@@ -155,13 +155,17 @@ module SinaStockInterface
     end
     def self.get_stock_data_by_id(stock_id)
       url = "#{StockDataUrl}#{stock_id}"
-      request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
+      respon =  RestClient.get(url)
+      request = respon.force_encoding(respon.headers[:content_type].split('=').last).encode('UTF-8')
+      # request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
       format_data(request)
     end
 
     def self.get_stock_index_by_id(stock_index_id)
       url = "#{StockDataUrl}#{stock_index_id}"
-      request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
+      respon =  RestClient.get(url)
+      request = respon.force_encoding(respon.headers[:content_type].split('=').last).encode('UTF-8')
+      # request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
       format_data(request)          
     end    
   end
@@ -186,7 +190,9 @@ module SinaStockInterface
     def self.search(key)
       format = /"(\S*)"/
       url = URI.encode("#{SearchUrl}#{key}")
-      request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
+      respon =  RestClient.get(url)
+      request = respon.force_encoding(respon.headers[:content_type].split('=').last).encode('UTF-8')
+      # request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
       request.scan(format)[0][0].split(';').collect{|a| a.split(',')}
     end
   end
