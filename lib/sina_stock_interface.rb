@@ -186,8 +186,17 @@ module SinaStockInterface
   end
 
   class Search
-    SearchUrl = 'http://suggest3.sinajs.cn/suggest/type=11,12,13,14,15&key='
     def self.search(key)
+      SearchUrl = 'http://suggest3.sinajs.cn/suggest/type=11,12,13,14,15&key='
+      format = /"(\S*)"/
+      url = URI.encode("#{SearchUrl}#{key}")
+      respon =  RestClient.get(url)
+      request = respon.force_encoding(respon.headers[:content_type].split('=').last).encode('UTF-8')
+      # request = open(url).read.encode(Encoding.find("UTF-8"),Encoding.find("GBK"))
+      request.scan(format)[0][0].split(';').collect{|a| a.split(',')}
+    end
+    def self.search_all(key)
+      SearchUrl = 'http://suggest3.sinajs.cn/suggest/key='
       format = /"(\S*)"/
       url = URI.encode("#{SearchUrl}#{key}")
       respon =  RestClient.get(url)
